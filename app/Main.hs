@@ -4,35 +4,35 @@ module Main where
 import Options.Applicative
 import Data.Semigroup ((<>))
 
+data Sample
+  = Hello [String]
+  | Goodbye
+  deriving (Eq, Show)
+
 main :: IO ()
 main = greet =<< execParser opts
   where
     opts = info (sample <**> helper)
       ( fullDesc
-     <> progDesc "\n commands:" 
-     <> header "CLI for handle toggle boring tasks" )
+     <> progDesc "Print a greeting for TARGET"
+     <> header "hello - a test for optparse-applicative" )
 
 greet :: Sample -> IO ()
-greet (Sample h False n) = putStrLn $ "Hello, " ++ h ++ replicate n '!'
-greet _ = return ()
+greet (Hello a) = print $ a
+greet Goodbye = print $ "Goodbye"
+greet a = print $ a
 
-data Sample = Sample
-  { hello      :: String
-  , quiet      :: Bool
-  , enthusiasm :: Int }
+hello :: Parser Sample
+hello = Hello <$> many (argument str (metavar "TARGET..."))
 
 sample :: Parser Sample
-sample = Sample
-      <$> argument str
-          ( metavar "command"
-         <> help "Target for the greeting" )
-      <*> switch
-          ( long "quiet"
-         <> short 'q'
-         <> help "Whether to be quiet" )
-      <*> option auto
-          ( long "enthusiasm"
-         <> help "How enthusiastically to greet"
-         <> showDefault
-         <> value 1
-         <> metavar "INT" )
+sample = subparser
+       ( command "hello" (info hello (progDesc "Print greeting"))
+      <> command "goodbye" (info (pure Goodbye) (progDesc "Say goodbye"))
+       )
+      <|> subparser
+       ( command "bonjour" (info hello (progDesc "Print greeting"))
+      <> command "au-revoir" (info (pure Goodbye) (progDesc "Say goodbye"))
+      <> commandGroup "French commands:"
+      <> hidden
+       )
