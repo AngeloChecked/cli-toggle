@@ -23,16 +23,13 @@ dependencies:
 - base >= 4.7 && < 5
 
 library:
-  source-dirs: src
+  source-dirs:           src
 
 executables:
   toggle-cli-exe:
+    ghc-options:         [-threaded, -rtsopts, -with-rtsopts=-N]
     main:                Main.hs
     source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
     dependencies:
     - toggle-cli
     - optparse-applicative
@@ -40,12 +37,9 @@ executables:
 
 tests:
   toggle-cli-test:
+    ghc-options:         [-threaded, -rtsopts, -with-rtsopts=-N]
     main:                Spec.hs
     source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
     dependencies:
     - toggle-cli
     - hspec

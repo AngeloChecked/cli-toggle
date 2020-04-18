@@ -1,6 +1,5 @@
 module Main where
 
-
 import Options.Applicative
 import Data.Semigroup ((<>))
 
@@ -31,6 +30,7 @@ data Cmd =
     | Pull 
     deriving (Eq, Show)
 
+
 data Sample = Sample 
       { cmd     :: Cmd
       , quiet      :: Bool
@@ -57,3 +57,9 @@ sample = Sample
          <> value 1
          <> metavar "INT" )
 
+
+cosa = "prova"
+  
+
+
+-- !bella
